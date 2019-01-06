@@ -1,0 +1,13 @@
+## Interface: 80100
+## Title: TankMD
+## Notes: One button to always misdirect to the tank. Also supports Tricks for rogues, and Innervate for druids (targets healers).
+## Author: Oppzippy
+## Version: @project-version@
+
+Config.lua
+MisdirectButton.lua
+Core.lua
+TankMD.lua
+
+Locales\enUS.lua
+Locales\esES.lua
