@@ -4,10 +4,12 @@
 ## Author: Oppzippy
 ## Version: @project-version@
 
+Libs\AceLocale-3.0\AceLocale-3.0.xml
+
 Config.lua
 MisdirectButton.lua
 Core.lua
 TankMD.lua
 
-Locales\enUS.lua
-Locales\esES.lua
+locales.xml
+Bindings.lua

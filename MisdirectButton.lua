@@ -8,22 +8,22 @@ function addon.CreateMisdirectButton(index, buttonName, spell, role)
 	setmetatable(misdirectButton, MisdirectButtonPrototype)
 	misdirectButton.index = index
 	misdirectButton.role = role
-	
+
 	local button = CreateFrame("Button", buttonName, UIParent, "SecureActionButtonTemplate")
 	button:SetAttribute("type", "spell")
 	button:SetAttribute("spell", spell)
 	button:SetAttribute("checkselfcast", false)
 	button:SetAttribute("checkfocuscast", false)
 	button:SetAttribute("allowVehicleTarget", false)
-	
+
 	misdirectButton.button = button
-	
+
 	return misdirectButton
 end
 
 function MisdirectButtonPrototype:GetSortedGroupMembers()
 	local groupMembers = {}
-	
+
 	local groupType = IsInRaid() and "raid" or "party"
 	-- Player is not included in party members, but it is for raid
 	if groupType == "party" then
@@ -35,15 +35,15 @@ function MisdirectButtonPrototype:GetSortedGroupMembers()
 		local name = UnitName(unit)
 		tinsert(groupMembers, name)
 	end
-	
+
 	table.sort(groupMembers)
-	
+
 	return groupMembers
 end
-	
+
 function MisdirectButtonPrototype:FindTarget()
 	local groupMembers = self:GetSortedGroupMembers(groupMembers)
-	
+
 	local targetCount = 0
 	for i, unit in ipairs(groupMembers) do
 		if UnitGroupRolesAssigned(unit) == self.role then

@@ -11,7 +11,7 @@ end
 -- Update target for all buttons
 function addon:Update()
 	if InCombatLockdown() then return end
-	
+
 	for _, misdirect in pairs(self.buttons) do
 		if misdirect.updateQueued then
 			misdirect:UpdateTarget()
