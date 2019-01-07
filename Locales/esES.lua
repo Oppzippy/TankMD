@@ -1,4 +1,5 @@
-local L = LibStub("AceLocale-3.0"):NewLocale("TankMD", "enUS", true)
+local L = LibStub("AceLocale-3.0"):NewLocale("TankMD", "esES")
+if not L then return end
 
 L.title = "TankMD"
 L.toFirst = "%s al primer %s"

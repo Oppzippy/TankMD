@@ -42,7 +42,7 @@ function MisdirectButtonPrototype:GetSortedGroupMembers()
 end
 
 function MisdirectButtonPrototype:FindTarget()
-	local groupMembers = self:GetSortedGroupMembers(groupMembers)
+	local groupMembers = self:GetSortedGroupMembers()
 
 	local targetCount = 0
 	for i, unit in ipairs(groupMembers) do
