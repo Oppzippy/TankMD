@@ -1,0 +1,9 @@
+language: minimal
+dist: xenial
+
+addons:
+  apt:
+    packages:
+      - lua-check
+
+script: luacheck .
