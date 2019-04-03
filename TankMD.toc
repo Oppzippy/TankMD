@@ -11,5 +11,5 @@ MisdirectButton.lua
 Core.lua
 TankMD.lua
 
-locales.xml
+Locales\locales.xml
 Bindings.lua
