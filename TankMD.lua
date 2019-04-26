@@ -22,7 +22,7 @@ for event, _ in pairs(config.updateEvents) do
 end
 
 -- Create buttons
-local class = select(2, UnitClass("player"))
+local _, class = UnitClass("player")
 local spell = config.misdirectSpells[class]
 local target = config.targets[class]
 local matchFunc = function(unit)
