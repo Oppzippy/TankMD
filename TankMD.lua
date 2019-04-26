@@ -25,7 +25,10 @@ end
 local class = select(2, UnitClass("player"))
 local spell = config.misdirectSpells[class]
 local target = config.targets[class]
+local matchFunc = function(unit)
+	return UnitGroupRolesAssigned(unit) == target
+end
 for i, buttonName in pairs(config.misdirectButtons) do
-	local button = addon.CreateMisdirectButton(i, buttonName, spell, target)
+	local button = addon.CreateMisdirectButton(buttonName, spell, i, matchFunc)
 	tinsert(addon.buttons, button)
 end

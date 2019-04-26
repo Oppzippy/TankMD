@@ -3,11 +3,15 @@ local _, addon = ...
 local MisdirectButtonPrototype = {}
 MisdirectButtonPrototype.__index = MisdirectButtonPrototype
 
-function addon.CreateMisdirectButton(index, buttonName, spell, role)
+-- @string buttonName Global button that is created
+-- @number spell spell id
+-- @number index: Number of matches to skip
+-- @param matchFunc function(unit) that returns true if the unit should be targetable
+function addon.CreateMisdirectButton(buttonName, spell, index, matchFunc)
 	local misdirectButton = {}
 	setmetatable(misdirectButton, MisdirectButtonPrototype)
 	misdirectButton.index = index
-	misdirectButton.role = role
+	misdirectButton.matchFunc = matchFunc
 
 	local button = CreateFrame("Button", buttonName, UIParent, "SecureActionButtonTemplate")
 	button:SetAttribute("type", "spell")
@@ -46,7 +50,7 @@ function MisdirectButtonPrototype:FindTarget()
 
 	local targetCount = 0
 	for i, unit in ipairs(groupMembers) do
-		if UnitGroupRolesAssigned(unit) == self.role then
+		if self.matchFunc(unit) then
 			targetCount = targetCount + 1
 			if targetCount == self.index then
 				return unit
