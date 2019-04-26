@@ -36,7 +36,6 @@ do
 	function MisdirectButtonPrototype:GetSortedGroupMembers()
 		local groupMembers = {}
 		local units = IsInRaid() and raid or party
-		-- Player is not included in party members, but it is for raid
 		for i = 1, GetNumGroupMembers() do
 			local unit = units[i]
 			local name = UnitName(unit)
