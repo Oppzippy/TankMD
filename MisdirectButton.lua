@@ -25,24 +25,28 @@ function addon.CreateMisdirectButton(buttonName, spell, index, matchFunc)
 	return misdirectButton
 end
 
-function MisdirectButtonPrototype:GetSortedGroupMembers()
-	local groupMembers = {}
+do
+	local party = {"player", "party1", "party2", "party3", "party4"}
+	local raid = {
+		"raid1", "raid2", "raid3", "raid4", "raid5", "raid6", "raid7", "raid8", "raid9", "raid10",
+		"raid11", "raid12", "raid13", "raid14", "raid15", "raid16", "raid17", "raid18", "raid19", "raid20",
+		"raid21", "raid22", "raid23", "raid24", "raid25", "raid26", "raid27", "raid28", "raid29", "raid30",
+		"raid31", "raid32", "raid33", "raid34", "raid35", "raid36", "raid37", "raid38", "raid39", "raid40"
+	}
+	function MisdirectButtonPrototype:GetSortedGroupMembers()
+		local groupMembers = {}
+		local units = IsInRaid() and raid or party
+		-- Player is not included in party members, but it is for raid
+		for i = 1, GetNumGroupMembers() do
+			local unit = units[i]
+			local name = UnitName(unit)
+			groupMembers[i] = name
+		end
 
-	local groupType = IsInRaid() and "raid" or "party"
-	-- Player is not included in party members, but it is for raid
-	if groupType == "party" then
-		local name = UnitName("player")
-		tinsert(groupMembers, name)
+		table.sort(groupMembers)
+
+		return groupMembers
 	end
-	for i = 1, GetNumGroupMembers() do
-		local unit = groupType .. i
-		local name = UnitName(unit)
-		tinsert(groupMembers, name)
-	end
-
-	table.sort(groupMembers)
-
-	return groupMembers
 end
 
 function MisdirectButtonPrototype:FindTarget()
