@@ -19,3 +19,18 @@ function addon:Update()
 		end
 	end
 end
+
+function addon:CreateButtons()
+	if #addon.buttons > 0 then return end
+
+	local _, class = UnitClass("player")
+	local spell = self.config.misdirectSpells[class]
+	local role = self.config.targets[class]
+	local matchFunc = function(unit)
+		return UnitGroupRolesAssigned(unit) == role
+	end
+	for i, buttonName in pairs(self.config.misdirectButtons) do
+		local button = addon.CreateMisdirectButton(buttonName, spell, i, matchFunc)
+		tinsert(addon.buttons, button)
+	end
+end

@@ -21,14 +21,4 @@ for event, _ in pairs(config.updateEvents) do
 	frame:RegisterEvent(event)
 end
 
--- Create buttons
-local _, class = UnitClass("player")
-local spell = config.misdirectSpells[class]
-local target = config.targets[class]
-local matchFunc = function(unit)
-	return UnitGroupRolesAssigned(unit) == target
-end
-for i, buttonName in pairs(config.misdirectButtons) do
-	local button = addon.CreateMisdirectButton(buttonName, spell, i, matchFunc)
-	tinsert(addon.buttons, button)
-end
+addon:CreateButtons()
