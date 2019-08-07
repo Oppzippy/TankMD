@@ -1,2 +1,2 @@
 # TankMD
-https://wow.curseforge.com/projects/tankmd
+https://www.curseforge.com/wow/addons/tankmd
