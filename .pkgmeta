@@ -1,7 +1,5 @@
 package-as: TankMD
+enable-nolib-creation: no
 
 ignore:
-  - .luacheckrc
-  - .travis.yml
   - README.md
-  - LICENSE.txt
