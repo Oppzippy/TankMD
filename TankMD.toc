@@ -3,8 +3,11 @@
 ## Notes: One button to always misdirect to the tank. Also supports Tricks for rogues, and Innervate for druids (targets healers).
 ## Author: Oppzippy
 ## Version: @project-version@
+## OptionalDeps: Ace3
 
-Libs\AceLocale-3.0\AceLocale-3.0.xml
+#@non-debug@
+# Libs\AceLocale-3.0\AceLocale-3.0.xml
+#@end-non-debug@
 
 Config.lua
 MisdirectButton.lua
