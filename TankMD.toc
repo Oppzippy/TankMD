@@ -4,6 +4,7 @@
 ## Author: Oppzippy
 ## Version: @project-version@
 ## OptionalDeps: Ace3
+## X-Curse-Project-ID: 258204
 
 #@non-debug@
 # Libs\AceLocale-3.0\AceLocale-3.0.xml
