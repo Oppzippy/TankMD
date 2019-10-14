@@ -3,15 +3,9 @@ max_line_length = false
 exclude_files = {
 	"**/Libs",
 }
-only = {
-	"011", -- syntax
-	"1", -- globals
-}
 ignore = {
-	"11/SLASH_.*", -- slash handlers
-	"1/[A-Z][A-Z][A-Z0-9_]+", -- three letter+ constants
+	"212", -- Unused argument
 }
-
 globals = {
 	"LibStub",
 	"UpdateOnBarHighlightMarksBySpell",

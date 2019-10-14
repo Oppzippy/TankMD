@@ -52,7 +52,7 @@ function MisdirectButtonPrototype:FindTarget()
 	local groupMembers = self:GetSortedGroupMembers()
 
 	local targetCount = 0
-	for i, unit in ipairs(groupMembers) do
+	for _, unit in ipairs(groupMembers) do
 		if self.matchFunc(unit) then
 			targetCount = targetCount + 1
 			if targetCount == self.index then
