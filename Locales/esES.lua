@@ -1,4 +1,4 @@
-local L = LibStub("AceLocale-3.0"):NewLocale("TankMD", "esES")
+local L = LibStub("AceLocale-3.0"):NewLocale("TankMD", "esES") or LibStub("AceLocale-3.0"):NewLocale("TankMD", "esMX")
 if not L then return end
 
 -- Blizzard translations
