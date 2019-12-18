@@ -14,6 +14,7 @@ function addon.CreateMisdirectButton(buttonName, spell, index, matchFunc)
 	misdirectButton.matchFunc = matchFunc
 
 	local button = CreateFrame("Button", buttonName, UIParent, "SecureActionButtonTemplate")
+	button:Hide()
 	button:SetAttribute("type", "spell")
 	button:SetAttribute("spell", spell)
 	button:SetAttribute("checkselfcast", false)
