@@ -21,7 +21,7 @@ function addon:Update()
 end
 
 function addon:CreateButtons()
-	if #addon.buttons > 0 then return end
+	if #self.buttons > 0 then return end
 
 	local _, class = UnitClass("player")
 	local spell = self.config.misdirectSpells[class]
@@ -30,7 +30,14 @@ function addon:CreateButtons()
 		return UnitGroupRolesAssigned(unit) == role
 	end
 	for i, buttonName in pairs(self.config.misdirectButtons) do
-		local button = addon.CreateMisdirectButton(buttonName, spell, i, matchFunc)
-		tinsert(addon.buttons, button)
+		local button = self.CreateMisdirectButton(buttonName, spell, i, matchFunc)
+		tinsert(self.buttons, button)
+		-- Backwards compatibility with old naming
+		local compatibilityName = "MisdirectTankButton"
+		if i > 2 then
+			compatibilityName = string.format("MisdirectTank%dButton", i)
+		end
+		local compatibilityButton = self.CreateMisdirectButton(compatibilityName, spell, i, matchFunc)
+		tinsert(self.buttons, compatibilityButton)
 	end
 end

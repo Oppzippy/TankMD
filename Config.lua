@@ -11,10 +11,9 @@ config.misdirectSpells = {
 
 -- Key is the target's index (first target found, second target found, etc.)
 -- Value is the name of the button that will be created for /click
--- Not ideal button names for backwards compatibility
 config.misdirectButtons = {
-	[1] = "MisdirectTankButton",
-	[2] = "MisdirectTank2Button",
+	[1] = "TankMDButton1",
+	[2] = "TankMDButton2",
 }
 
 -- Events which queue a tank update
