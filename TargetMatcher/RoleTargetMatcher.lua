@@ -1,5 +1,4 @@
 local _, addon = ...
-TankMD = addon
 local RoleTargetMatcherPrototype = setmetatable({}, addon.TargetMatcherPrototype)
 addon.RoleTargetMatcherPrototype = RoleTargetMatcherPrototype
 RoleTargetMatcherPrototype.__index = RoleTargetMatcherPrototype
