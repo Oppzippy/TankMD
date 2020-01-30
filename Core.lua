@@ -26,18 +26,16 @@ function addon:CreateButtons()
 	local _, class = UnitClass("player")
 	local spell = self.config.misdirectSpells[class]
 	local role = self.config.targets[class]
-	local matchFunc = function(unit)
-		return UnitGroupRolesAssigned(unit) == role
-	end
+	local targetMatcher = class == "HUNTER" and addon:CreateRoleOrPetTargetMatcher(role) or addon:CreateRoleTargetMatcher(role)
 	for i, buttonName in pairs(self.config.misdirectButtons) do
-		local button = self.CreateMisdirectButton(buttonName, spell, i, matchFunc)
+		local button = self:CreateMisdirectButton(buttonName, spell, i, targetMatcher)
 		tinsert(self.buttons, button)
 		-- Backwards compatibility with old naming
 		local compatibilityName = "MisdirectTankButton"
 		if i > 2 then
 			compatibilityName = string.format("MisdirectTank%dButton", i)
 		end
-		local compatibilityButton = self.CreateMisdirectButton(compatibilityName, spell, i, matchFunc)
+		local compatibilityButton = self:CreateMisdirectButton(compatibilityName, spell, i, targetMatcher)
 		tinsert(self.buttons, compatibilityButton)
 	end
 end

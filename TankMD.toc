@@ -11,6 +11,7 @@
 # Libs\AceLocale-3.0\AceLocale-3.0.xml
 #@end-non-debug@
 
+TargetMatcher\TargetMatchers.xml
 Config.lua
 MisdirectButton.lua
 Core.lua
