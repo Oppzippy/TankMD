@@ -5,6 +5,7 @@
 ## Version: @project-version@
 ## OptionalDeps: Ace3
 ## X-Curse-Project-ID: 258204
+## X-WoWI-ID: 25625
 
 #@non-debug@
 # Libs\LibStub\LibStub.lua
