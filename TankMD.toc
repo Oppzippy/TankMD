@@ -6,6 +6,7 @@
 ## OptionalDeps: Ace3
 ## X-Curse-Project-ID: 258204
 ## X-WoWI-ID: 25625
+## X-Wago-ID: xZKxpqKk
 
 Libs.xml
 
