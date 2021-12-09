@@ -9,11 +9,14 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - run: sudo apt-get install lua-check
-      - run: luacheck .
-      - env:
+      - name: Install luacheck
+        run: sudo apt-get install lua-check
+      - name: Lint
+        run: luacheck .
+      - name: Package and release
+        uses: BigWigsMods/packager@master
+        env:
           GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
           CF_API_KEY: ${{ secrets.CF_API_KEY }}
           WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
           WAGO_API_TOKEN: ${{ secrets.WAGO_API_TOKEN }}
-        run: curl -s https://raw.githubusercontent.com/BigWigsMods/packager/master/release.sh | bash
