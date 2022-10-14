@@ -1,7 +1,7 @@
 local _, addon = ...
 local config = addon.config
 
-local LGIST = LibStub("LibGroupInSpecT-1.1")
+local LGIST = LibStub("LibGroupInSpecT-1.1", true)
 
 -- Create frame
 local frame = CreateFrame("Frame")
@@ -23,11 +23,14 @@ for event, _ in pairs(config.updateEvents) do
 	frame:RegisterEvent(event)
 end
 
-local inspectHandler = {}
-function inspectHandler:GroupInSpecT_Update(...)
-	addon:QueueUpdate()
-	addon:Update()
+if LGIST then
+	local inspectHandler = {}
+	function inspectHandler:GroupInSpecT_Update(...)
+		addon:QueueUpdate()
+		addon:Update()
+	end
+
+	LGIST.RegisterCallback(inspectHandler, "GroupInSpecT_Update")
 end
-LGIST.RegisterCallback(inspectHandler, "GroupInSpecT_Update")
 
 addon:CreateButtons()

@@ -3,7 +3,8 @@ local RoleTargetMatcherPrototype = setmetatable({}, addon.TargetMatcherPrototype
 addon.RoleTargetMatcherPrototype = RoleTargetMatcherPrototype
 RoleTargetMatcherPrototype.__index = RoleTargetMatcherPrototype
 
-local LGIST = LibStub("LibGroupInSpecT-1.1")
+-- Not compatible with classic
+local LGIST = LibStub("LibGroupInSpecT-1.1", true)
 
 function addon:CreateRoleTargetMatcher(role)
 	local targetMatcher = setmetatable({}, RoleTargetMatcherPrototype)
@@ -15,7 +16,7 @@ function RoleTargetMatcherPrototype:Matches(unit)
 	local role = UnitGroupRolesAssigned(unit)
 	if role ~= "NONE" then
 		return self.role == role
-	else
+	elseif LGIST then
 		local guid = UnitGUID(unit)
 		local inspectInfo = LGIST:GetCachedInfo(guid)
 		if inspectInfo then
