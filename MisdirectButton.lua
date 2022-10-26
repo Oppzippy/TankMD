@@ -20,6 +20,7 @@ function addon:CreateMisdirectButton(buttonName, spell, index, targetMatcher)
 	button:SetAttribute("checkselfcast", false)
 	button:SetAttribute("checkfocuscast", false)
 	button:SetAttribute("allowVehicleTarget", false)
+	button:RegisterForClicks("LeftButtonDown", "LeftButtonUp")
 
 	misdirectButton.button = button
 
