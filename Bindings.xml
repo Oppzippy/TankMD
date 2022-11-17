@@ -1,4 +1,7 @@
 <Bindings>
-	<Binding name="CLICK TankMDButton1:LeftButton" category="BINDING_HEADER_TANKMD" runOnUp="false" />
-	<Binding name="CLICK TankMDButton2:LeftButton" category="BINDING_HEADER_TANKMD" runOnUp="false" />
+	<!-- category needs to be plain text to avoid taint
+		 https://us.forums.blizzard.com/en/wow/t/bindingsxml-taint-and-other-issues/1394681/9
+		 -->
+	<Binding name="CLICK TankMDButton1:LeftButton" category="TankMD " runOnUp="false" />
+	<Binding name="CLICK TankMDButton2:LeftButton" category="TankMD " runOnUp="false" />
 </Bindings>
