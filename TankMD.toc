@@ -1,5 +1,5 @@
 ## Interface: 100005
-## Interface-Wrath: 30400
+## Interface-Wrath: 30401
 ## Title: TankMD
 ## Notes: One button to always misdirect to the tank. Also supports Tricks for rogues, and Innervate for druids (targets healers).
 ## Author: Oppzippy
