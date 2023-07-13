@@ -1,0 +1,17 @@
+name: Lint
+
+on:
+  push:
+    branches:
+      - "*"
+      - "!master"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install luacheck
+        run: sudo apt-get install lua-check
+      - name: Lint
+        run: luacheck .
