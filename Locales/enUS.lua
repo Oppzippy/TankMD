@@ -11,4 +11,7 @@ L.DAMAGER = _G['DAMAGER']
 L.title = "TankMD"
 L.toFirst = "%s to first %s"
 L.toSecond = "%s to second %s"
+L.toThird = "%s to third %s"
+L.toFourth = "%s to fourth %s"
+L.toFifth = "%s to fifth %s"
 --@end-do-not-package@--
