@@ -10,3 +10,4 @@ externals:
 
 ignore:
   - README.md
+  - Tests
