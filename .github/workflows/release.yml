@@ -9,10 +9,14 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Install luacheck
-        run: sudo apt-get install lua-check
+      - name: Install luacheck and luarocks
+        run: sudo apt-get install lua-check luarocks
+      - name: Install luaunit
+        run: sudo luarocks install luaunit
       - name: Lint
         run: luacheck .
+      - name: Test
+        run: lua5.1 Tests/Test.lua
       - name: Package and release
         uses: BigWigsMods/packager@v2
         env:
