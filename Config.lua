@@ -24,6 +24,7 @@ config.misdirectButtons = {
 config.queueEvents = {
 	["GROUP_ROSTER_UPDATE"] = true,
 	["PLAYER_ENTERING_WORLD"] = true,
+	["PLAYER_FOCUS_CHANGED"] = true,
 }
 
 -- Events which update the tank if an update is queued
