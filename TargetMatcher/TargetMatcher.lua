@@ -10,14 +10,15 @@ TargetMatcherPrototype.raidUnits = {
 	"raid31", "raid32", "raid33", "raid34", "raid35", "raid36", "raid37", "raid38", "raid39", "raid40"
 }
 TargetMatcherPrototype.partyUnits = { "player", "party1", "party2", "party3", "party4" }
+local prio = { focus = 1, maintank = 2, role = 3, none = 4}
 
 
 function TargetMatcherPrototype:FindTargets()
 	local groupMembers = self:GetSortedGroupMembers()
 	local targets = {}
 	for _, unit in ipairs(groupMembers) do
-		if self:Matches(unit) then
-			targets[#targets + 1] = unit
+		if self:Matches(unit.name) then
+			targets[#targets + 1] = unit.name
 		end
 	end
 	return targets
@@ -28,6 +29,16 @@ function TargetMatcherPrototype:Matches(unit)
 	return false
 end
 
+local sortByPrio = function(unit_a,unit_b)
+  if unit_a and unit_b then
+  	return (unit_a.prio < unit_b.prio) or (unit_a.prio == unit_b.prio) and (unit_a.name < unit_b.name)
+  elseif unit_a then
+    return true
+  elseif unit_b then
+    return false
+  end
+end
+
 function TargetMatcherPrototype:GetSortedGroupMembers()
 	local groupMembers = {}
 	local units = IsInRaid() and self.raidUnits or self.partyUnits
@@ -35,12 +46,21 @@ function TargetMatcherPrototype:GetSortedGroupMembers()
 	for i = 1, maxGroupMembers do
 		local unit = units[i]
 		local name = UnitName(unit)
+		local priority = prio.none
+		if UnitExists("focus") and UnitIsUnit(unit,"focus") then
+			priority = prio.focus
+		elseif GetPartyAssignment("MAINTANK",unit) then
+			priority = prio.maintank
+		elseif UnitGroupRolesAssigned(unit) ~= "NONE" then
+			priority = prio.role
+		end
 		if name and name ~= UNKNOWNOBJECT then
-			groupMembers[#groupMembers + 1] = name
+			--groupMembers[#groupMembers + 1] = name
+			tinsert(groupMembers,{name=name, prio=priority})
 		end
 	end
 
-	table.sort(groupMembers)
+	table.sort(groupMembers, sortByPrio)
 
 	return groupMembers
 end

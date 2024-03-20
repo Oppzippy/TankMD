@@ -13,9 +13,18 @@ function addon:CreateRoleTargetMatcher(role)
 end
 
 function RoleTargetMatcherPrototype:Matches(unit)
+	if UnitIsDeadOrGhost(unit) then return false end
 	local role = UnitGroupRolesAssigned(unit)
-	if role ~= "NONE" then
-		return self.role == role
+	local raidTank = GetPartyAssignment("MAINTANK",unit)
+	local focus = UnitExists("focus") and UnitIsUnit(unit,"focus")
+	if focus then
+		return true
+	elseif role ~= "NONE" then
+		if IsInRaid() then
+			return (self.role == "TANK") and raidTank or (self.role == role)
+		else
+			return self.role == role
+		end
 	elseif LGIST then
 		local guid = UnitGUID(unit)
 		local inspectInfo = LGIST:GetCachedInfo(guid)
