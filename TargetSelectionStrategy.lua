@@ -52,3 +52,11 @@ function TargetSelectionStrategy.Role(targetRole)
 		return false
 	end
 end
+
+---@return TargetSelectionStrategy
+function TargetSelectionStrategy.MainTank()
+	return function(unit)
+		local isMainTank = GetPartyAssignment("MAINTANK", unit, true)
+		return isMainTank
+	end
+end
