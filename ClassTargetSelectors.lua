@@ -8,10 +8,10 @@ local TargetSelector = addon.TargetSelector
 local TargetSelectionStrategy = addon.TargetSelectionStrategy
 
 local tankSelectionFactories = {
-	ignoreMainTanks = function()
+	tankRoleOnly = function()
 		return TargetSelector.PartyOrRaid(TargetSelectionStrategy.Role("TANK"))
 	end,
-	includeMainTanks = function()
+	tanksAndMainTanks = function()
 		return TargetSelector.PartyOrRaid(
 			TargetSelectionStrategy.Any({
 				TargetSelectionStrategy.MainTank(),

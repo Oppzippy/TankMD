@@ -29,16 +29,16 @@ addon.optionsTable = {
 			args = {
 				tankSelectionStrategy = {
 					type = "select",
-					name = L.tank_selection,
+					name = L.tank_selection_method,
 					order = 1,
 					width = "full",
 					values = {
-						ignoreMainTanks = L.ignore_main_tank_assignment,
-						includeMainTanks = L.include_main_tanks,
+						tankRoleOnly = L.tank_role_only,
+						tanksAndMainTanks = L.tanks_and_main_tanks,
 						prioritizeMainTanks = L.prioritize_main_tanks,
 						mainTanksOnly = L.main_tanks_only,
 					},
-					sorting = { "ignoreMainTanks", "includeMainTanks", "prioritizeMainTanks", "mainTanksOnly" },
+					sorting = { "tankRoleOnly", "tanksAndMainTanks", "prioritizeMainTanks", "mainTanksOnly" },
 					disabled = function()
 						local _, class = UnitClass("player")
 						return class ~= "HUNTER" and class ~= "ROGUE"
