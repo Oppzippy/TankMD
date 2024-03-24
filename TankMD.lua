@@ -76,13 +76,8 @@ function TankMD:ProcessQueuedButtonTargetUpdate()
 	self.isUpdateQueued = false
 
 	local targets = self:GetTargets()
-	for i, target in ipairs(targets) do
-		local button = self.buttons[i]
-		if button ~= nil then
-			button:SetTarget(target)
-		else
-			break
-		end
+	for i, button in ipairs(self.buttons) do
+		button:SetTarget(targets[i])
 	end
 end
 

@@ -43,7 +43,7 @@ function addon:CreateMisdirectButton(spell, index)
 	return misdirectButton
 end
 
----@param target string
+---@param target string|nil
 function MisdirectButton:SetTarget(target)
 	if target then
 		self:SetEnabled(true)
@@ -59,6 +59,7 @@ function MisdirectButton:GetTarget()
 	return self.button:GetAttribute("unit")
 end
 
+---@private
 function MisdirectButton:SetEnabled(enabled)
 	if enabled then
 		self.button:SetAttribute("type", "spell")
