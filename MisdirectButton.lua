@@ -9,23 +9,10 @@ local metatable = {
 	__index = MisdirectButton,
 }
 
----@param spell integer Spell id
----@param index integer Match index to target
----@return table
-function addon:CreateMisdirectButton(spell, index)
-	---@class MisdirectButton
-	local misdirectButton = setmetatable({
-		index = index,
-	}, metatable)
-
-	local buttonName = string.format("TankMDButton%d", index)
-	local button = CreateFrame("Button", buttonName, UIParent, "SecureActionButtonTemplate")
-	-- TODO check if this works
-	if index == 1 then
-		MisdirectTankButton = button
-	else
-		_G[string.format("MisdirectTank%dButton", index)] = button
-	end
+---@param name string
+---@param spell integer
+local function createButton(name, spell)
+	local button = CreateFrame("Button", name, UIParent, "SecureActionButtonTemplate")
 	button:Hide()
 	button:SetAttribute("type", "spell")
 	button:SetAttribute("spell", spell)
@@ -33,8 +20,25 @@ function addon:CreateMisdirectButton(spell, index)
 	button:SetAttribute("checkfocuscast", false)
 	button:SetAttribute("allowVehicleTarget", false)
 	button:RegisterForClicks("LeftButtonDown", "LeftButtonUp")
+	return button
+end
 
-	misdirectButton.button = button
+---@param spell integer Spell id
+---@param index integer Match index to target
+---@return table
+function addon:CreateMisdirectButton(spell, index)
+	local buttonName = string.format("TankMDButton%d", index)
+	local legacyButtonName = "MisdirectTankButton"
+	if index > 1 then
+		legacyButtonName = string.format("MisdirectTank%dButton", index)
+	end
+
+	---@class MisdirectButton
+	local misdirectButton = setmetatable({
+		index = index,
+		button = createButton(buttonName, spell),
+		legacyButton = createButton(legacyButtonName, spell),
+	}, metatable)
 
 	return misdirectButton
 end
@@ -44,6 +48,7 @@ function MisdirectButton:SetTarget(target)
 	if target then
 		self:SetEnabled(true)
 		self.button:SetAttribute("unit", target)
+		self.legacyButton:SetAttribute("unit", target)
 	else
 		self:SetEnabled(false)
 	end
@@ -52,7 +57,9 @@ end
 function MisdirectButton:SetEnabled(enabled)
 	if enabled then
 		self.button:SetAttribute("type", "spell")
+		self.legacyButton:SetAttribute("type", "spell")
 	else
 		self.button:SetAttribute("type", nil)
+		self.legacyButton:SetAttribute("type", nil)
 	end
 end
