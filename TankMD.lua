@@ -42,15 +42,13 @@ function TankMD:OnEnable()
 end
 
 function TankMD:SlashCommand(args)
-	if args == "debug" then
-		for i, button in ipairs(self.buttons) do
-			self:Printf(
-				"Button %d: %s (%s)",
-				i,
-				button:GetTarget() or "no target",
-				button:IsEnabled() and "enabled" or "disabled"
-			)
-		end
+	for i, button in ipairs(self.buttons) do
+		self:Printf(
+			"Button %d: %s (%s)",
+			i,
+			button:GetTarget() or "no target",
+			button:IsEnabled() and "enabled" or "disabled"
+		)
 	end
 end
 
