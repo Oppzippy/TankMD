@@ -26,15 +26,19 @@ end
 function TargetSelector.Chain(selectors)
 	return coroutine.wrap(function()
 		for _, selector in ipairs(selectors) do
-			-- Split sorting out into TargetSelector.Sort if there is ever a reason to not always sort
-			local targets = TargetSelector.Evaluate(selector)
-			table.sort(targets)
-
-			for _, target in ipairs(targets) do
+			for target in selector do
 				coroutine.yield(target)
 			end
 		end
 	end)
+end
+
+---@param selector TargetSelector
+---@return TargetSelector
+function TargetSelector.Sort(selector)
+	local targets = TargetSelector.Evaluate(selector)
+	table.sort(targets)
+	return addon.Util.IterateTable(targets)
 end
 
 ---@param strategy TargetSelectionStrategy

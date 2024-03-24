@@ -12,24 +12,24 @@ local getTankSelector
 do
 	local tankSelectionFactories = {
 		tankRoleOnly = function()
-			return TargetSelector.PartyOrRaid(TargetSelectionStrategy.Role("TANK"))
+			return TargetSelector.Sort(TargetSelector.PartyOrRaid(TargetSelectionStrategy.Role("TANK")))
 		end,
 		tanksAndMainTanks = function()
-			return TargetSelector.PartyOrRaid(
+			return TargetSelector.Sort(TargetSelector.PartyOrRaid(
 				TargetSelectionStrategy.Any({
 					TargetSelectionStrategy.MainTank(),
 					TargetSelectionStrategy.Role("TANK"),
 				})
-			)
+			))
 		end,
 		prioritizeMainTanks = function()
 			return TargetSelector.Chain({
-				TargetSelector.PartyOrRaid(TargetSelectionStrategy.MainTank()),
-				TargetSelector.PartyOrRaid(TargetSelectionStrategy.Role("TANK")),
+				TargetSelector.Sort(TargetSelector.PartyOrRaid(TargetSelectionStrategy.MainTank())),
+				TargetSelector.Sort(TargetSelector.PartyOrRaid(TargetSelectionStrategy.Role("TANK"))),
 			})
 		end,
 		mainTanksOnly = function()
-			return TargetSelector.PartyOrRaid(TargetSelectionStrategy.MainTank())
+			return TargetSelector.Sort(TargetSelector.PartyOrRaid(TargetSelectionStrategy.MainTank()))
 		end,
 	}
 

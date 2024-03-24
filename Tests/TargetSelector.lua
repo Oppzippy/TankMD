@@ -14,11 +14,11 @@ function TestTargetSelector:TestChainDoesNotSeparateSelectors()
 	luaunit.assertEquals(actual, { "b", "a" })
 end
 
-function TestTargetSelector:TestChainSortsWithinSingleSelector()
+function TestTargetSelector:TestSort()
 	local actual = TargetSelector.Evaluate(
-		TargetSelector.Chain({ Util.IterateTable({ "c", "b" }), Util.IterateTable({ "a" }) })
+		TargetSelector.Sort(Util.IterateTable({ "b", "c" }))
 	)
-	luaunit.assertEquals(actual, { "b", "c", "a" })
+	luaunit.assertEquals(actual, { "b", "c" })
 end
 
 function TestTargetSelector:TestValuesAreUnique()
