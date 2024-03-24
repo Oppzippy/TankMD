@@ -3,14 +3,14 @@ local addon = select(2, ...)
 
 local LGIST = LibStub("LibGroupInSpecT-1.1", true)
 
-local TargetSelectionStrategy = {}
-addon.TargetSelectionStrategy = TargetSelectionStrategy
+local TargetSelectionFilter = {}
+addon.TargetSelectionFilter = TargetSelectionFilter
 
----@alias TargetSelectionStrategy fun(unit: string): boolean
+---@alias TargetSelectionFilter fun(unit: string): boolean
 
----@param strategies (TargetSelectionStrategy)[]
----@return TargetSelectionStrategy
-function TargetSelectionStrategy.Any(strategies)
+---@param strategies (TargetSelectionFilter)[]
+---@return TargetSelectionFilter
+function TargetSelectionFilter.Any(strategies)
 	return function(unit)
 		if #strategies == 0 then return true end
 		for _, strategy in ipairs(strategies) do
@@ -22,9 +22,9 @@ function TargetSelectionStrategy.Any(strategies)
 	end
 end
 
----@param strategies (TargetSelectionStrategy)[]
----@return TargetSelectionStrategy
-function TargetSelectionStrategy.All(strategies)
+---@param strategies (TargetSelectionFilter)[]
+---@return TargetSelectionFilter
+function TargetSelectionFilter.All(strategies)
 	return function(unit)
 		for _, strategy in ipairs(strategies) do
 			if not strategy(unit) then
@@ -36,8 +36,8 @@ function TargetSelectionStrategy.All(strategies)
 end
 
 ---@param targetRole "TANK"|"HEALER"|"DAMAGER"
----@return TargetSelectionStrategy
-function TargetSelectionStrategy.Role(targetRole)
+---@return TargetSelectionFilter
+function TargetSelectionFilter.Role(targetRole)
 	return function(unit)
 		local role = UnitGroupRolesAssigned(unit)
 		if role ~= "NONE" then
@@ -53,8 +53,8 @@ function TargetSelectionStrategy.Role(targetRole)
 	end
 end
 
----@return TargetSelectionStrategy
-function TargetSelectionStrategy.MainTank()
+---@return TargetSelectionFilter
+function TargetSelectionFilter.MainTank()
 	return function(unit)
 		local isMainTank = GetPartyAssignment("MAINTANK", unit, true)
 		return isMainTank

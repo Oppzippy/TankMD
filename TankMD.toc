@@ -20,7 +20,7 @@ Locales\locales.xml
 
 Util.lua
 TargetSelector.lua
-TargetSelectionStrategy.lua
+TargetSelectionFilter.lua
 MisdirectButton.lua
 Options.lua
 ClassTargetSelectors.lua

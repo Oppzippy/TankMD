@@ -41,7 +41,7 @@ function TargetSelector.Sort(selector)
 	return addon.Util.IterateTable(targets)
 end
 
----@param strategy TargetSelectionStrategy
+---@param strategy TargetSelectionFilter
 ---@return TargetSelector
 function TargetSelector.PartyOrRaid(strategy)
 	return coroutine.wrap(function()

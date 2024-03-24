@@ -18,6 +18,6 @@ MAX_PARTY_MEMBERS = 4
 UNKNOWNOBJECT = "Unknown"
 
 --- Internal
-ExecuteWoWLuaFile("TargetSelectionStrategy.lua")
+ExecuteWoWLuaFile("TargetSelectionFilter.lua")
 ExecuteWoWLuaFile("TargetSelector.lua")
 ExecuteWoWLuaFile("Util.lua")

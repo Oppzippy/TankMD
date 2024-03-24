@@ -5,31 +5,31 @@ local ClassTargetSelectors = {}
 addon.ClassTargetSelectors = ClassTargetSelectors
 
 local TargetSelector = addon.TargetSelector
-local TargetSelectionStrategy = addon.TargetSelectionStrategy
+local TargetSelectionFilter = addon.TargetSelectionFilter
 
 ---@type fun(strategyName: string): TargetSelector
 local getTankSelector
 do
 	local tankSelectionFactories = {
 		tankRoleOnly = function()
-			return TargetSelector.Sort(TargetSelector.PartyOrRaid(TargetSelectionStrategy.Role("TANK")))
+			return TargetSelector.Sort(TargetSelector.PartyOrRaid(TargetSelectionFilter.Role("TANK")))
 		end,
 		tanksAndMainTanks = function()
 			return TargetSelector.Sort(TargetSelector.PartyOrRaid(
-				TargetSelectionStrategy.Any({
-					TargetSelectionStrategy.MainTank(),
-					TargetSelectionStrategy.Role("TANK"),
+				TargetSelectionFilter.Any({
+					TargetSelectionFilter.MainTank(),
+					TargetSelectionFilter.Role("TANK"),
 				})
 			))
 		end,
 		prioritizeMainTanks = function()
 			return TargetSelector.Chain({
-				TargetSelector.Sort(TargetSelector.PartyOrRaid(TargetSelectionStrategy.MainTank())),
-				TargetSelector.Sort(TargetSelector.PartyOrRaid(TargetSelectionStrategy.Role("TANK"))),
+				TargetSelector.Sort(TargetSelector.PartyOrRaid(TargetSelectionFilter.MainTank())),
+				TargetSelector.Sort(TargetSelector.PartyOrRaid(TargetSelectionFilter.Role("TANK"))),
 			})
 		end,
 		mainTanksOnly = function()
-			return TargetSelector.Sort(TargetSelector.PartyOrRaid(TargetSelectionStrategy.MainTank()))
+			return TargetSelector.Sort(TargetSelector.PartyOrRaid(TargetSelectionFilter.MainTank()))
 		end,
 	}
 
@@ -63,11 +63,11 @@ end
 
 function ClassTargetSelectors.EVOKER()
 	return chainWithFocus(TargetSelector.Chain({
-		TargetSelector.PartyOrRaid(TargetSelectionStrategy.Role("TANK")),
+		TargetSelector.PartyOrRaid(TargetSelectionFilter.Role("TANK")),
 		TargetSelector.Player(),
 	}))
 end
 
 function ClassTargetSelectors.DRUID()
-	return chainWithFocus(TargetSelector.PartyOrRaid(TargetSelectionStrategy.Role("TANK")))
+	return chainWithFocus(TargetSelector.PartyOrRaid(TargetSelectionFilter.Role("TANK")))
 end
