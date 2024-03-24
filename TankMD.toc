@@ -5,6 +5,7 @@
 ## Author: Oppzippy
 ## Version: @project-version@
 ## OptionalDeps: Ace3, LibGroupInSpecT-1.1
+## SavedVariables: TankMDDB
 ## X-Curse-Project-ID: 258204
 ## X-WoWI-ID: 25625
 ## X-Wago-ID: xZKxpqKk
@@ -15,12 +16,14 @@ Libs.xml
 #@non-version-retail@
 LibsClassic.xml
 #@end-non-version-retail@
+Locales\locales.xml
 
 Util.lua
 TargetSelector.lua
 TargetSelectionStrategy.lua
 MisdirectButton.lua
+Options.lua
+ClassTargetSelectors.lua
 TankMD.lua
 
-Locales\locales.xml
 Bindings.lua

@@ -9,6 +9,13 @@ L.DAMAGER = _G['DAMAGER']
 
 --@do-not-package@--
 L.title = "TankMD"
+L.general = "General"
+L.profiles = "Profiles"
+L.tank_selection = "Tank Selection"
+L.ignore_main_tank_assignment = "Ignore Main Tank Assignment"
+L.include_main_tanks = "Include Main Tanks"
+L.prioritize_main_tanks = "Prioritize Main Tanks"
+L.main_tanks_only = "Main Tanks Only"
 L.toFirst = "%s to first %s"
 L.toSecond = "%s to second %s"
 L.toThird = "%s to third %s"

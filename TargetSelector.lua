@@ -7,6 +7,7 @@ addon.TargetSelector = TargetSelector
 ---@alias TargetSelector (fun(): string|nil)
 
 ---@param selector TargetSelector
+---@return string[]
 function TargetSelector.Evaluate(selector)
 	local seen = {}
 	local targets = {}
@@ -38,7 +39,7 @@ end
 
 ---@param strategy TargetSelectionStrategy
 ---@return fun(): string|nil
-function TargetSelector.Group(strategy)
+function TargetSelector.PartyOrRaid(strategy)
 	return coroutine.wrap(function()
 		for name in addon.Util.IterateGroupMemberNames() do
 			if strategy(name) then

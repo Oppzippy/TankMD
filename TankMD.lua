@@ -1,11 +1,16 @@
+---@type string
+local addonName = ...
 ---@class AddonNamespace
 local addon = select(2, ...)
 
-local TargetSelectionStrategy = addon.TargetSelectionStrategy
-local TargetSelector = addon.TargetSelector
-
 local LGIST = LibStub("LibGroupInSpecT-1.1", true)
 local AceAddon = LibStub("AceAddon-3.0")
+local AceDB = LibStub("AceDB-3.0")
+local AceConfig = LibStub("AceConfig-3.0")
+local AceConfigDialog = LibStub("AceConfigDialog-3.0")
+local AceDBOptions = LibStub("AceDBOptions-3.0")
+
+local L = LibStub("AceLocale-3.0"):GetLocale("TankMD")
 
 ---@class TankMD: AceAddon, AceEvent-3.0, AceConsole-3.0
 local TankMD = AceAddon:NewAddon("TankMD", "AceEvent-3.0", "AceConsole-3.0")
@@ -15,6 +20,8 @@ TankMD.isUpdateQueued = false
 
 
 function TankMD:OnInitialize()
+	addon.db = AceDB:New("TankMDDB", addon.defaultProfile)
+
 	self:RegisterEvent("GROUP_ROSTER_UPDATE", "QueueButtonTargetUpdate")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", "QueueButtonTargetUpdate")
 
@@ -22,9 +29,16 @@ function TankMD:OnInitialize()
 end
 
 function TankMD:OnEnable()
-	self:RegisterLGIST()
 	self:CreateMisdirectButtons()
+	self:RegisterLGIST()
 	self:RegisterChatCommand("tankmd", "SlashCommand")
+
+	AceConfig:RegisterOptionsTable(addonName, addon.optionsTable)
+	AceConfigDialog:AddToBlizOptions(addonName, L.title)
+
+	local profiles = AceDBOptions:GetOptionsTable(addon.db)
+	AceConfig:RegisterOptionsTable(addonName .. "_Profiles", profiles)
+	AceConfigDialog:AddToBlizOptions(addonName .. "_Profiles", L.profiles, L.title)
 end
 
 function TankMD:SlashCommand(args)
@@ -61,9 +75,8 @@ function TankMD:ProcessQueuedButtonTargetUpdate()
 	if not self.isUpdateQueued or InCombatLockdown() then return end
 	self.isUpdateQueued = false
 
-	local i = 0
-	for target in self:GetTargetSelector() do
-		i = i + 1
+	local targets = self:GetTargets()
+	for i, target in ipairs(targets) do
 		local button = self.buttons[i]
 		if button ~= nil then
 			button:SetTarget(target)
@@ -117,20 +130,9 @@ do
 	end
 end
 
----@return TargetSelector
-function TankMD:GetTargetSelector()
-	local classTargetSelectorChains = {
-		HUNTER = TargetSelector.Chain({
-			TargetSelector.Group(TargetSelectionStrategy.Role("TANK")),
-			TargetSelector.Pet(),
-		}),
-		ROGUE = TargetSelector.Group(TargetSelectionStrategy.Role("TANK")),
-		EVOKER = TargetSelector.Chain({
-			TargetSelector.Group(TargetSelectionStrategy.Role("TANK")),
-			TargetSelector.Player(),
-		}),
-		DRUID = TargetSelector.Group(TargetSelectionStrategy.Role("TANK")),
-	}
+---@return string[]
+function TankMD:GetTargets()
 	local _, class = UnitClass("player")
-	return classTargetSelectorChains[class] or TargetSelector.Chain({})
+	local selector = addon.ClassTargetSelectors[class]() or addon.TargetSelector.Chain({})
+	return addon.TargetSelector.Evaluate(selector)
 end
