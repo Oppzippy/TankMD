@@ -1,0 +1,19 @@
+{
+  "Lua.diagnostics.globals": [
+    "UIParent",
+    "table",
+    "ipairs",
+    "MAX_RAID_MEMBERS",
+    "MAX_PARTY_MEMBERS",
+    "IsInRaid",
+    "UnitName",
+    "UNKNOWNOBJECT",
+    "_G",
+    "UnitClass",
+    "pairs",
+    "setmetatable",
+    "UnitGroupRolesAssigned",
+    "UnitGUID",
+    "class"
+  ]
+}

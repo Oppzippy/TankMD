@@ -1,15 +1,14 @@
-local L = LibStub("AceLocale-3.0"):GetLocale("TankMD")
-local _, addon = ...
-local config = addon.config
-local defaultClass = "HUNTER"
+local AceAddon = LibStub("AceAddon-3.0")
+local AceLocale = LibStub("AceLocale-3.0")
 
-local spell, roleKey
-do
-	local _, class = UnitClass("player")
-	local spellId = config.misdirectSpells[class] or config.misdirectSpells[defaultClass]
-	spell = GetSpellInfo(spellId)
-	roleKey = config.targets[class] or config.targets[defaultClass]
-end
+local L = AceLocale:GetLocale("TankMD")
+local TankMD = AceAddon:GetAddon("TankMD")
+---@cast TankMD TankMD
+
+local _, class = UnitClass("player")
+local spellId = TankMD:GetMisdirectSpellID(class)
+local spell = GetSpellInfo(spellId)
+local roleKey = TankMD:GetMisdirectTargetRole(class)
 
 _G["BINDING_HEADER_TANKMD"] = L.title
 

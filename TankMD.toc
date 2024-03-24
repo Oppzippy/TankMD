@@ -17,9 +17,7 @@ LibsClassic.xml
 #@end-non-version-retail@
 
 TargetMatcher\TargetMatchers.xml
-Config.lua
 MisdirectButton.lua
-Core.lua
 TankMD.lua
 
 Locales\locales.xml

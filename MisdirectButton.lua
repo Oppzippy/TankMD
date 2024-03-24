@@ -1,17 +1,24 @@
 local _, addon = ...
 
-local MisdirectButtonPrototype = {}
-MisdirectButtonPrototype.__index = MisdirectButtonPrototype
+---@class MisdirectButton
+---@field button Frame|SecureActionButtonTemplate
+---@field index integer
+---@field targetMatchers TargetMatcher[]
+local MisdirectButton = {}
+local metatable = {
+	__index = MisdirectButton,
+}
 
--- @string buttonName Global button that is created
--- @number spell spell id
--- @number index Match index to target
--- @param targetMatcher TargetMatcher that will provide a table of units
-function addon:CreateMisdirectButton(buttonName, spell, index, targetMatcher)
-	local misdirectButton = {}
-	setmetatable(misdirectButton, MisdirectButtonPrototype)
-	misdirectButton.index = index
-	misdirectButton.targetMatcher = targetMatcher
+---@param buttonName string Global button that is created
+---@param spell integer Spell id
+---@param index integer Match index to target
+---@param targetMatchers TargetMatcher[]
+---@return table
+function addon:CreateMisdirectButton(buttonName, spell, index, targetMatchers)
+	local misdirectButton = setmetatable({
+		index = index,
+		targetMatchers = targetMatchers,
+	}, metatable)
 
 	local button = CreateFrame("Button", buttonName, UIParent, "SecureActionButtonTemplate")
 	button:Hide()
@@ -27,7 +34,7 @@ function addon:CreateMisdirectButton(buttonName, spell, index, targetMatcher)
 	return misdirectButton
 end
 
-function MisdirectButtonPrototype:UpdateTarget()
+function MisdirectButton:UpdateTarget()
 	local target = self:FindTarget()
 	if target then
 		self:SetEnabled(true)
@@ -37,11 +44,17 @@ function MisdirectButtonPrototype:UpdateTarget()
 	end
 end
 
-function MisdirectButtonPrototype:FindTarget()
-	return self.targetMatcher:FindTargets()[self.index]
+function MisdirectButton:FindTarget()
+	local currentIndex = 0
+	for _, targetMatcher in ipairs(self.targetMatchers) do
+		local targets = targetMatcher:FindTargets()
+		if currentIndex + #targets > self.index then
+			return targets[self.index - currentIndex]
+		end
+	end
 end
 
-function MisdirectButtonPrototype:SetEnabled(enabled)
+function MisdirectButton:SetEnabled(enabled)
 	if enabled then
 		self.button:SetAttribute("type", "spell")
 	else

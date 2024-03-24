@@ -1,5 +1,6 @@
 local _, addon = ...
 
+---@class TargetMatcher
 local TargetMatcherPrototype = {}
 addon.TargetMatcherPrototype = TargetMatcherPrototype
 TargetMatcherPrototype.__index = TargetMatcherPrototype
