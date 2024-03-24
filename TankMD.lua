@@ -1,4 +1,8 @@
-local _, addon = ...
+---@class AddonNamespace
+local addon = select(2, ...)
+
+local TargetSelectionStrategy = addon.TargetSelectionStrategy
+local TargetSelector = addon.TargetSelector
 
 local LGIST = LibStub("LibGroupInSpecT-1.1", true)
 local AceAddon = LibStub("AceAddon-3.0")
@@ -7,8 +11,20 @@ local AceAddon = LibStub("AceAddon-3.0")
 local TankMD = AceAddon:NewAddon("TankMD", "AceEvent-3.0")
 ---@type MisdirectButton[]
 TankMD.buttons = {}
----@type table<MisdirectButton, boolean>
-TankMD.updateQueued = {}
+TankMD.isUpdateQueued = false
+
+local classTargetSelectorChains = {
+	HUNTER = TargetSelector.Chain({
+		TargetSelector.Group(TargetSelectionStrategy.Role("TANK")),
+		TargetSelector.Pet(),
+	}),
+	ROGUE = TargetSelector.Group(TargetSelectionStrategy.Role("TANK")),
+	EVOKER = TargetSelector.Chain({
+		TargetSelector.Group(TargetSelectionStrategy.Role("TANK")),
+		TargetSelector.Player(),
+	}),
+	DRUID = TargetSelector.Group(TargetSelectionStrategy.Role("TANK")),
+}
 
 function TankMD:OnInitialize()
 	self:RegisterEvent("GROUP_ROSTER_UPDATE", "QueueTankUpdate")
@@ -35,20 +51,22 @@ function TankMD:RegisterLGIST()
 end
 
 function TankMD:QueueTankUpdate()
-	for _, button in pairs(self.buttons) do
-		self.updateQueued[button] = true
-	end
-
+	self.isUpdateQueued = true
 	self:ProcessTankUpdate()
 end
 
 function TankMD:ProcessTankUpdate()
-	if InCombatLockdown() then return end
+	if not self.isUpdateQueued or InCombatLockdown() then return end
+	self.isUpdateQueued = false
 
-	for _, button in pairs(self.buttons) do
-		if self.updateQueued[button] then
-			button:UpdateTarget()
-			self.updateQueued[button] = nil
+	local i = 0
+	for target in self:GetTargetSelector() do
+		i = i + 1
+		local button = self.buttons[i]
+		if button ~= nil then
+			button:SetTarget(target)
+		else
+			break
 		end
 	end
 end
@@ -58,30 +76,10 @@ function TankMD:CreateMisdirectButtons()
 
 	local _, class = UnitClass("player")
 	local spell = self:GetMisdirectSpellID(class)
-	local role = self:GetMisdirectTargetRole(class)
-
-	local targetMatcher
-	if class == "HUNTER" then
-		targetMatcher = addon:CreateRoleOrPetTargetMatcher(role)
-	elseif class == "EVOKER" then
-		targetMatcher = addon:CreateRoleOrSelfTargetMatcher(role)
-	else
-		targetMatcher = addon:CreateRoleTargetMatcher(role)
-	end
 
 	for i = 1, 5 do
-		-- Modern button naming
-		local buttonName = string.format("TankMDButton%d", i)
-		local button = addon:CreateMisdirectButton(buttonName, spell, i, targetMatcher)
-		self.buttons[#self.buttons + 1] = button
-
-		-- Backwards compatibility with old button naming
-		local compatibilityName = "MisdirectTankButton"
-		if i > 2 then
-			compatibilityName = string.format("MisdirectTank%dButton", i)
-		end
-		local compatibilityButton = addon:CreateMisdirectButton(compatibilityName, spell, i, targetMatcher)
-		self.buttons[#self.buttons + 1] = compatibilityButton
+		local button = addon:CreateMisdirectButton(spell, i)
+		self.buttons[i] = button
 	end
 end
 
@@ -114,4 +112,10 @@ do
 	function TankMD:GetMisdirectTargetRole(class)
 		return targets[class] or "TANK"
 	end
+end
+
+---@return TargetSelector
+function TankMD:GetTargetSelector()
+	local class = UnitClass("player")
+	return classTargetSelectorChains[class] or TargetSelector.Chain({})
 end

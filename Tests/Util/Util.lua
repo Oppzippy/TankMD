@@ -1,9 +1,10 @@
-local _, addon = ...
+---@type AddonNamespace
+local addon = select(2, ...)
 local luaunit = require("luaunit")
 
-TestTargetMatcher = {}
+TestUtil = {}
 
-function TestTargetMatcher:TestGetSortedGroupMembers()
+function TestUtil:TestIterateGroupMemberNames()
 	local testCases = {
 		-- Basic case
 		{
@@ -22,12 +23,6 @@ function TestTargetMatcher:TestGetSortedGroupMembers()
 			isRaid = false,
 			input = { "Unit1", "Unit2", UNKNOWNOBJECT, "Unit4", UNKNOWNOBJECT },
 			output = { "Unit1", "Unit2", "Unit4" },
-		},
-		-- Unsorted group members
-		{
-			isRaid = false,
-			input = { "Unit2", "Unit3", "Unit1" },
-			output = { "Unit1", "Unit2", "Unit3" },
 		},
 		-- Full party
 		{
@@ -59,7 +54,6 @@ function TestTargetMatcher:TestGetSortedGroupMembers()
 		},
 	}
 
-	local targetMatcher = setmetatable({}, { __index = addon.TargetMatcherPrototype })
 	for i, case in ipairs(testCases) do
 		IsInRaid = function() return case.isRaid end
 		UnitName = function(unit)
@@ -82,7 +76,10 @@ function TestTargetMatcher:TestGetSortedGroupMembers()
 			local name = case.input[index]
 			return name
 		end
-		local groupMembers = targetMatcher:GetSortedGroupMembers()
+		local groupMembers = {}
+		for name in addon.Util.IterateGroupMemberNames() do
+			groupMembers[#groupMembers + 1] = name
+		end
 		luaunit.assertEquals(groupMembers, case.output, "test case " .. i)
 	end
 end

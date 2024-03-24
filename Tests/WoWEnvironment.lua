@@ -8,7 +8,7 @@ function ExecuteWoWLuaFile(path)
 	if not func then
 		error(string.format("error loading %s: function is nil", path))
 	end
-	func("GlobalSearch", namespace)
+	func("TankMD", namespace)
 end
 
 MAX_RAID_MEMBERS = 40
@@ -16,4 +16,4 @@ MAX_PARTY_MEMBERS = 4
 UNKNOWNOBJECT = "Unknown"
 
 --- Internal
-ExecuteWoWLuaFile("TargetMatcher/TargetMatcher.lua")
+ExecuteWoWLuaFile("Util.lua")

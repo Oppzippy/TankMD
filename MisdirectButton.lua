@@ -1,26 +1,31 @@
-local _, addon = ...
+---@class AddonNamespace
+local addon = select(2, ...)
 
 ---@class MisdirectButton
----@field button Frame|SecureActionButtonTemplate
 ---@field index integer
----@field targetMatchers TargetMatcher[]
+---@field targetSelector TargetSelector
 local MisdirectButton = {}
 local metatable = {
 	__index = MisdirectButton,
 }
 
----@param buttonName string Global button that is created
 ---@param spell integer Spell id
 ---@param index integer Match index to target
----@param targetMatchers TargetMatcher[]
 ---@return table
-function addon:CreateMisdirectButton(buttonName, spell, index, targetMatchers)
+function addon:CreateMisdirectButton(spell, index)
+	---@class MisdirectButton
 	local misdirectButton = setmetatable({
 		index = index,
-		targetMatchers = targetMatchers,
 	}, metatable)
 
+	local buttonName = string.format("TankMDButton%d", index)
 	local button = CreateFrame("Button", buttonName, UIParent, "SecureActionButtonTemplate")
+	-- TODO check if this works
+	if index == 1 then
+		MisdirectTankButton = button
+	else
+		_G[string.format("MisdirectTank%dButton", index)] = button
+	end
 	button:Hide()
 	button:SetAttribute("type", "spell")
 	button:SetAttribute("spell", spell)
@@ -34,23 +39,13 @@ function addon:CreateMisdirectButton(buttonName, spell, index, targetMatchers)
 	return misdirectButton
 end
 
-function MisdirectButton:UpdateTarget()
-	local target = self:FindTarget()
+---@param target string
+function MisdirectButton:SetTarget(target)
 	if target then
 		self:SetEnabled(true)
 		self.button:SetAttribute("unit", target)
 	else
 		self:SetEnabled(false)
-	end
-end
-
-function MisdirectButton:FindTarget()
-	local currentIndex = 0
-	for _, targetMatcher in ipairs(self.targetMatchers) do
-		local targets = targetMatcher:FindTargets()
-		if currentIndex + #targets > self.index then
-			return targets[self.index - currentIndex]
-		end
 	end
 end
 

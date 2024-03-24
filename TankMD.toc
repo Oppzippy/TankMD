@@ -16,7 +16,8 @@ Libs.xml
 LibsClassic.xml
 #@end-non-version-retail@
 
-TargetMatcher\TargetMatchers.xml
+TargetSelector.lua
+TargetSelectionStrategy.lua
 MisdirectButton.lua
 TankMD.lua
 
