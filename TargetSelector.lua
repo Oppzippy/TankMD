@@ -38,7 +38,7 @@ function TargetSelector.Chain(selectors)
 end
 
 ---@param strategy TargetSelectionStrategy
----@return fun(): string|nil
+---@return TargetSelector
 function TargetSelector.PartyOrRaid(strategy)
 	return coroutine.wrap(function()
 		for name in addon.Util.IterateGroupMemberNames() do
@@ -51,10 +51,23 @@ end
 
 ---@return TargetSelector
 function TargetSelector.Player()
-	return addon.Util.IterateTable({ "player" })
+	return addon.Util.IterateSingleValue("player")
 end
 
 ---@return TargetSelector
 function TargetSelector.Pet()
-	return addon.Util.IterateTable({ "pet" })
+	return addon.Util.IterateSingleValue("pet")
+end
+
+---@return TargetSelector
+function TargetSelector.Focus()
+	-- This should not allow the selection of pets, since pets can have duplicate names,
+	-- but we want to refer to a specific unit even if unit ids shift around.
+	local focusGUID = UnitGUID("focus")
+	if focusGUID and IsGUIDInGroup(focusGUID) then
+		local name = UnitName("focus")
+		return addon.Util.IterateSingleValue(name)
+	else
+		return function() end
+	end
 end

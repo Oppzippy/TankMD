@@ -1,11 +1,14 @@
 ---@class AddonNamespace
 local addon = select(2, ...)
 
+local AceAddon = LibStub("AceAddon-3.0")
+
 local L = LibStub("AceLocale-3.0"):GetLocale("TankMD")
 
 addon.defaultProfile = {
 	profile = {
 		tankSelectionStrategy = "ignoreMainTanks",
+		prioritizeFocus = false,
 	},
 }
 
@@ -20,6 +23,9 @@ addon.optionsTable = {
 	end,
 	set = function(info, value)
 		addon.db.profile[info[#info]] = value
+		local TankMD = AceAddon:GetAddon("TankMD")
+		---@cast TankMD TankMD
+		TankMD:QueueButtonTargetUpdate()
 	end,
 	args = {
 		general = {
@@ -44,6 +50,13 @@ addon.optionsTable = {
 						return class ~= "HUNTER" and class ~= "ROGUE"
 					end,
 				},
+				prioritizeFocus = {
+					type = "toggle",
+					name = L.prioritize_focus,
+					desc = L.prioritize_focus_desc,
+					order = 2,
+					width = "full",
+				}
 			},
 		},
 	},

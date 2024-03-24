@@ -36,3 +36,16 @@ function Util.IterateTable(t)
 		return t[i]
 	end
 end
+
+---@generic T
+---@param value T
+---@return fun(): T|nil
+function Util.IterateSingleValue(value)
+	local done = false
+	return function()
+		if not done then
+			done = true
+			return value
+		end
+	end
+end

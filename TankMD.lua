@@ -23,6 +23,7 @@ function TankMD:OnInitialize()
 	addon.db = AceDB:New("TankMDDB", addon.defaultProfile)
 
 	self:RegisterEvent("GROUP_ROSTER_UPDATE", "QueueButtonTargetUpdate")
+	self:RegisterEvent("PLAYER_FOCUS_CHANGED", "QueueButtonTargetUpdate")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", "QueueButtonTargetUpdate")
 
 	self:RegisterEvent("PLAYER_REGEN_ENABLED", "ProcessQueuedButtonTargetUpdate")

@@ -7,47 +7,67 @@ addon.ClassTargetSelectors = ClassTargetSelectors
 local TargetSelector = addon.TargetSelector
 local TargetSelectionStrategy = addon.TargetSelectionStrategy
 
-local tankSelectionFactories = {
-	tankRoleOnly = function()
-		return TargetSelector.PartyOrRaid(TargetSelectionStrategy.Role("TANK"))
-	end,
-	tanksAndMainTanks = function()
-		return TargetSelector.PartyOrRaid(
-			TargetSelectionStrategy.Any({
-				TargetSelectionStrategy.MainTank(),
-				TargetSelectionStrategy.Role("TANK"),
+---@type fun(strategyName: string): TargetSelector
+local getTankSelector
+do
+	local tankSelectionFactories = {
+		tankRoleOnly = function()
+			return TargetSelector.PartyOrRaid(TargetSelectionStrategy.Role("TANK"))
+		end,
+		tanksAndMainTanks = function()
+			return TargetSelector.PartyOrRaid(
+				TargetSelectionStrategy.Any({
+					TargetSelectionStrategy.MainTank(),
+					TargetSelectionStrategy.Role("TANK"),
+				})
+			)
+		end,
+		prioritizeMainTanks = function()
+			return TargetSelector.Chain({
+				TargetSelector.PartyOrRaid(TargetSelectionStrategy.MainTank()),
+				TargetSelector.PartyOrRaid(TargetSelectionStrategy.Role("TANK")),
 			})
-		)
-	end,
-	prioritizeMainTanks = function()
+		end,
+		mainTanksOnly = function()
+			return TargetSelector.PartyOrRaid(TargetSelectionStrategy.MainTank())
+		end,
+	}
+
+	getTankSelector = function(method)
+		return (tankSelectionFactories[method] or tankSelectionFactories.tankRoleOnly)()
+	end
+end
+
+---@param selector TargetSelector
+---@return TargetSelector
+local function chainWithFocus(selector)
+	if addon.db.profile.prioritizeFocus then
 		return TargetSelector.Chain({
-			TargetSelector.PartyOrRaid(TargetSelectionStrategy.MainTank()),
-			TargetSelector.PartyOrRaid(TargetSelectionStrategy.Role("TANK")),
+			TargetSelector.Focus(),
+			selector,
 		})
-	end,
-	mainTanksOnly = function()
-		return TargetSelector.PartyOrRaid(TargetSelectionStrategy.MainTank())
-	end,
-}
+	end
+	return selector
+end
 
 function ClassTargetSelectors.HUNTER()
-	return TargetSelector.Chain({
-		(tankSelectionFactories[addon.db.profile.tankSelectionStrategy] or tankSelectionFactories.tankRoleOnly)(),
-		TargetSelector.Pet(),
-	})
+	return chainWithFocus(TargetSelector.Chain({
+		getTankSelector(addon.db.profile.tankSelectionStrategy),
+		TargetSelector.Pet()
+	}))
 end
 
 function ClassTargetSelectors.ROGUE()
-	return (tankSelectionFactories[addon.db.profile.tankSelectionStrategy] or tankSelectionFactories.tankRoleOnly)()
+	return chainWithFocus(getTankSelector(addon.db.profile.tankSelectionStrategy))
 end
 
 function ClassTargetSelectors.EVOKER()
-	return TargetSelector.Chain({
+	return chainWithFocus(TargetSelector.Chain({
 		TargetSelector.PartyOrRaid(TargetSelectionStrategy.Role("TANK")),
 		TargetSelector.Player(),
-	})
+	}))
 end
 
 function ClassTargetSelectors.DRUID()
-	return TargetSelector.PartyOrRaid(TargetSelectionStrategy.Role("TANK"))
+	return chainWithFocus(TargetSelector.PartyOrRaid(TargetSelectionStrategy.Role("TANK")))
 end
