@@ -32,13 +32,13 @@ local tankSelectionFactories = {
 
 function ClassTargetSelectors.HUNTER()
 	return TargetSelector.Chain({
-		tankSelectionFactories[addon.db.profile.tankSelectionStrategy]() or tankSelectionFactories.ignoreMainTanks(),
+		tankSelectionFactories[addon.db.profile.tankSelectionStrategy]() or tankSelectionFactories.tankRoleOnly(),
 		TargetSelector.Pet(),
 	})
 end
 
 function ClassTargetSelectors.ROGUE()
-	return tankSelectionFactories[addon.db.profile.tankSelectionStrategy]() or tankSelectionFactories.ignoreMainTanks()
+	return tankSelectionFactories[addon.db.profile.tankSelectionStrategy]() or tankSelectionFactories.tankRoleOnly()
 end
 
 function ClassTargetSelectors.EVOKER()
