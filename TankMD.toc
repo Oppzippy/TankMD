@@ -4,7 +4,7 @@
 ## Notes: One button to always misdirect to the tank. Also supports Tricks for rogues, Blistering Scales for evokers and Innervate for druids (targets healers).
 ## Author: Oppzippy
 ## Version: @project-version@
-## OptionalDeps: Ace3
+## OptionalDeps: Ace3, LibGroupInSpecT-1.1
 ## X-Curse-Project-ID: 258204
 ## X-WoWI-ID: 25625
 ## X-Wago-ID: xZKxpqKk
@@ -16,6 +16,7 @@ Libs.xml
 LibsClassic.xml
 #@end-non-version-retail@
 
+Util.lua
 TargetSelector.lua
 TargetSelectionStrategy.lua
 MisdirectButton.lua

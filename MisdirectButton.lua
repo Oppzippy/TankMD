@@ -54,6 +54,11 @@ function MisdirectButton:SetTarget(target)
 	end
 end
 
+---@return string
+function MisdirectButton:GetTarget()
+	return self.button:GetAttribute("unit")
+end
+
 function MisdirectButton:SetEnabled(enabled)
 	if enabled then
 		self.button:SetAttribute("type", "spell")
@@ -62,4 +67,9 @@ function MisdirectButton:SetEnabled(enabled)
 		self.button:SetAttribute("type", nil)
 		self.legacyButton:SetAttribute("type", nil)
 	end
+end
+
+---@return boolean
+function MisdirectButton:IsEnabled()
+	return self.button:GetAttribute("type") ~= nil
 end

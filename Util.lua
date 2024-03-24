@@ -25,3 +25,14 @@ function Util.IterateGroupMemberNames()
 		end
 	end)
 end
+
+---@generic T
+---@param t T[]
+---@return fun(): T|nil
+function Util.IterateTable(t)
+	local i = 0
+	return function()
+		i = i + 1
+		return t[i]
+	end
+end

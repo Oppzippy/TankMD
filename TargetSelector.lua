@@ -6,22 +6,11 @@ addon.TargetSelector = TargetSelector
 
 ---@alias TargetSelector (fun(): string|nil)
 
----@generic T
----@param t T[]
----@return fun(): T
-local function iterateTable(t)
-	local i = 0
-	return function()
-		i = i + 1
-		return t[i]
-	end
-end
-
 ---@param selector TargetSelector
 function TargetSelector.Evaluate(selector)
 	local seen = {}
 	local targets = {}
-	for target in selector() do
+	for target in selector do
 		-- Split uniqueness checking out into TargetSelector.Unique if there is ever a reason to not always be unique
 		if not seen[target] then
 			seen[target] = true
@@ -61,10 +50,10 @@ end
 
 ---@return TargetSelector
 function TargetSelector.Player()
-	return iterateTable({ "player" })
+	return addon.Util.IterateTable({ "player" })
 end
 
 ---@return TargetSelector
 function TargetSelector.Pet()
-	return iterateTable({ "pet" })
+	return addon.Util.IterateTable({ "pet" })
 end

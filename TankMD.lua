@@ -7,42 +7,44 @@ local TargetSelector = addon.TargetSelector
 local LGIST = LibStub("LibGroupInSpecT-1.1", true)
 local AceAddon = LibStub("AceAddon-3.0")
 
----@class TankMD: AceAddon, AceEvent-3.0
-local TankMD = AceAddon:NewAddon("TankMD", "AceEvent-3.0")
+---@class TankMD: AceAddon, AceEvent-3.0, AceConsole-3.0
+local TankMD = AceAddon:NewAddon("TankMD", "AceEvent-3.0", "AceConsole-3.0")
 ---@type MisdirectButton[]
 TankMD.buttons = {}
 TankMD.isUpdateQueued = false
 
-local classTargetSelectorChains = {
-	HUNTER = TargetSelector.Chain({
-		TargetSelector.Group(TargetSelectionStrategy.Role("TANK")),
-		TargetSelector.Pet(),
-	}),
-	ROGUE = TargetSelector.Group(TargetSelectionStrategy.Role("TANK")),
-	EVOKER = TargetSelector.Chain({
-		TargetSelector.Group(TargetSelectionStrategy.Role("TANK")),
-		TargetSelector.Player(),
-	}),
-	DRUID = TargetSelector.Group(TargetSelectionStrategy.Role("TANK")),
-}
 
 function TankMD:OnInitialize()
-	self:RegisterEvent("GROUP_ROSTER_UPDATE", "QueueTankUpdate")
-	self:RegisterEvent("PLAYER_ENTERING_WORLD", "QueueTankUpdate")
+	self:RegisterEvent("GROUP_ROSTER_UPDATE", "QueueButtonTargetUpdate")
+	self:RegisterEvent("PLAYER_ENTERING_WORLD", "QueueButtonTargetUpdate")
 
-	self:RegisterEvent("PLAYER_REGEN_ENABLED", "ProcessTankUpdate")
+	self:RegisterEvent("PLAYER_REGEN_ENABLED", "ProcessQueuedButtonTargetUpdate")
 end
 
 function TankMD:OnEnable()
 	self:RegisterLGIST()
 	self:CreateMisdirectButtons()
+	self:RegisterChatCommand("tankmd", "SlashCommand")
+end
+
+function TankMD:SlashCommand(args)
+	if args == "debug" then
+		for i, button in ipairs(self.buttons) do
+			self:Printf(
+				"Button %d: %s (%s)",
+				i,
+				button:GetTarget() or "no target",
+				button:IsEnabled() and "enabled" or "disabled"
+			)
+		end
+	end
 end
 
 function TankMD:RegisterLGIST()
 	if LGIST then
 		local inspectHandler = {
 			GroupInSpecT_Update = function()
-				self:QueueTankUpdate()
+				self:QueueButtonTargetUpdate()
 			end,
 		}
 
@@ -50,12 +52,12 @@ function TankMD:RegisterLGIST()
 	end
 end
 
-function TankMD:QueueTankUpdate()
+function TankMD:QueueButtonTargetUpdate()
 	self.isUpdateQueued = true
-	self:ProcessTankUpdate()
+	self:ProcessQueuedButtonTargetUpdate()
 end
 
-function TankMD:ProcessTankUpdate()
+function TankMD:ProcessQueuedButtonTargetUpdate()
 	if not self.isUpdateQueued or InCombatLockdown() then return end
 	self.isUpdateQueued = false
 
@@ -81,6 +83,7 @@ function TankMD:CreateMisdirectButtons()
 		local button = addon:CreateMisdirectButton(spell, i)
 		self.buttons[i] = button
 	end
+	self:QueueButtonTargetUpdate()
 end
 
 do
@@ -116,6 +119,18 @@ end
 
 ---@return TargetSelector
 function TankMD:GetTargetSelector()
-	local class = UnitClass("player")
+	local classTargetSelectorChains = {
+		HUNTER = TargetSelector.Chain({
+			TargetSelector.Group(TargetSelectionStrategy.Role("TANK")),
+			TargetSelector.Pet(),
+		}),
+		ROGUE = TargetSelector.Group(TargetSelectionStrategy.Role("TANK")),
+		EVOKER = TargetSelector.Chain({
+			TargetSelector.Group(TargetSelectionStrategy.Role("TANK")),
+			TargetSelector.Player(),
+		}),
+		DRUID = TargetSelector.Group(TargetSelectionStrategy.Role("TANK")),
+	}
+	local _, class = UnitClass("player")
 	return classTargetSelectorChains[class] or TargetSelector.Chain({})
 end
