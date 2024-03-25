@@ -7,7 +7,7 @@ addon.ClassTargetSelectors = ClassTargetSelectors
 local TargetSelector = addon.TargetSelector
 local TargetSelectionFilter = addon.TargetSelectionFilter
 
----@type fun(strategyName: string): TargetSelector
+---@type fun(method: string): TargetSelector
 local getTankSelector
 do
 	local tankSelectionFactories = {
@@ -52,13 +52,13 @@ end
 
 function ClassTargetSelectors.HUNTER()
 	return chainWithFocus(TargetSelector.Chain({
-		getTankSelector(addon.db.profile.tankSelectionStrategy),
+		getTankSelector(addon.db.profile.tankSelectionMethod),
 		TargetSelector.Pet()
 	}))
 end
 
 function ClassTargetSelectors.ROGUE()
-	return chainWithFocus(getTankSelector(addon.db.profile.tankSelectionStrategy))
+	return chainWithFocus(getTankSelector(addon.db.profile.tankSelectionMethod))
 end
 
 function ClassTargetSelectors.EVOKER()

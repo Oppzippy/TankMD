@@ -8,13 +8,13 @@ addon.TargetSelectionFilter = TargetSelectionFilter
 
 ---@alias TargetSelectionFilter fun(unit: string): boolean
 
----@param strategies (TargetSelectionFilter)[]
+---@param filters (TargetSelectionFilter)[]
 ---@return TargetSelectionFilter
-function TargetSelectionFilter.Any(strategies)
+function TargetSelectionFilter.Any(filters)
 	return function(unit)
-		if #strategies == 0 then return true end
-		for _, strategy in ipairs(strategies) do
-			if strategy(unit) then
+		if #filters == 0 then return true end
+		for _, filter in ipairs(filters) do
+			if filter(unit) then
 				return true
 			end
 		end
@@ -22,12 +22,12 @@ function TargetSelectionFilter.Any(strategies)
 	end
 end
 
----@param strategies (TargetSelectionFilter)[]
+---@param filters (TargetSelectionFilter)[]
 ---@return TargetSelectionFilter
-function TargetSelectionFilter.All(strategies)
+function TargetSelectionFilter.All(filters)
 	return function(unit)
-		for _, strategy in ipairs(strategies) do
-			if not strategy(unit) then
+		for _, filter in ipairs(filters) do
+			if not filter(unit) then
 				return false
 			end
 		end

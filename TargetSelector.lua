@@ -41,12 +41,12 @@ function TargetSelector.Sort(selector)
 	return addon.Util.IterateTable(targets)
 end
 
----@param strategy TargetSelectionFilter
+---@param filter TargetSelectionFilter
 ---@return TargetSelector
-function TargetSelector.PartyOrRaid(strategy)
+function TargetSelector.PartyOrRaid(filter)
 	return coroutine.wrap(function()
 		for name in addon.Util.IterateGroupMemberNames() do
-			if strategy(name) then
+			if filter(name) then
 				coroutine.yield(name)
 			end
 		end

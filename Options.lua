@@ -7,7 +7,7 @@ local L = LibStub("AceLocale-3.0"):GetLocale("TankMD")
 
 addon.defaultProfile = {
 	profile = {
-		tankSelectionStrategy = "ignoreMainTanks",
+		tankSelectionMethod = "ignoreMainTanks",
 		prioritizeFocus = false,
 	},
 }
@@ -33,7 +33,7 @@ addon.optionsTable = {
 			name = L.general,
 			order = 1,
 			args = {
-				tankSelectionStrategy = {
+				tankSelectionMethod = {
 					type = "select",
 					name = L.tank_selection_method,
 					order = 1,
