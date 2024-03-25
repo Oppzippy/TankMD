@@ -63,11 +63,13 @@ end
 
 function ClassTargetSelectors.EVOKER()
 	return chainWithFocus(TargetSelector.Chain({
-		TargetSelector.PartyOrRaid(TargetSelectionFilter.Role("TANK")),
+		TargetSelector.Sort(TargetSelector.PartyOrRaid(TargetSelectionFilter.Role("TANK"))),
 		TargetSelector.Player(),
 	}))
 end
 
 function ClassTargetSelectors.DRUID()
-	return chainWithFocus(TargetSelector.PartyOrRaid(TargetSelectionFilter.Role("TANK")))
+	return chainWithFocus(
+		TargetSelector.Sort(TargetSelector.PartyOrRaid(TargetSelectionFilter.Role("TANK")))
+	)
 end
