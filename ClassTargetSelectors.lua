@@ -63,7 +63,7 @@ end
 
 function ClassTargetSelectors.EVOKER()
 	return chainWithFocus(TargetSelector.Chain({
-		TargetSelector.Sort(TargetSelector.PartyOrRaid(TargetSelectionFilter.Role("TANK"))),
+		getTankSelector(addon.db.profile.tankSelectionMethod),
 		TargetSelector.Player(),
 	}))
 end
