@@ -20,4 +20,5 @@ UNKNOWNOBJECT = "Unknown"
 --- Internal
 ExecuteWoWLuaFile("TargetSelectionFilter.lua")
 ExecuteWoWLuaFile("TargetSelector.lua")
+ExecuteWoWLuaFile("ClassTargetSelectors.lua")
 ExecuteWoWLuaFile("Util.lua")
