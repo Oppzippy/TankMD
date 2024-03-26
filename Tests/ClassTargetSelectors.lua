@@ -98,7 +98,20 @@ local tests = {
 			{ name = "a", role = "HEALER", isMainTank = false },
 		},
 		expected = { "a", "c" },
-	}
+	},
+	{
+		name = "Prioritize focus puts the focus first",
+		class = { "HUNTER", "ROGUE", "DRUID", "EVOKER" },
+		prioritizeFocus = true,
+		group = {
+			{ name = "a", role = "TANK" },
+			{ name = "b", role = "HEALER" },
+		},
+		expectedHUNTER = { "focusName", "a", "pet" },
+		expectedROGUE = { "focusName", "a" },
+		expectedEVOKER = { "focusName", "a", "player" },
+		expectedDRUID = { "focusName", "b" },
+	},
 }
 
 ---@param unit string
@@ -129,6 +142,9 @@ for _, test in ipairs(tests) do
 			end
 
 			function UnitName(unit)
+				if unit == "focus" then
+					return "focusName"
+				end
 				local index = getUnitIndex(test, unit)
 				return test.group[index] and test.group[index].name
 			end
@@ -136,10 +152,14 @@ for _, test in ipairs(tests) do
 			function UnitGUID(unit)
 				unit = unit:lower()
 				if unit == "focus" then
-					return
+					return "focusGUID"
 				end
 				local index = getUnitIndex(test, unit)
 				return test.group[index] and test.group[index].name .. "GUID"
+			end
+
+			function IsGUIDInGroup(guid)
+				if guid == "focusGUID" then return true end
 			end
 
 			function UnitGroupRolesAssigned(unit)
