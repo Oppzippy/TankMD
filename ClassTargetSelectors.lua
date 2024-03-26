@@ -70,6 +70,6 @@ end
 
 function ClassTargetSelectors.DRUID()
 	return chainWithFocus(
-		TargetSelector.Sort(TargetSelector.PartyOrRaid(TargetSelectionFilter.Role("TANK")))
+		TargetSelector.Sort(TargetSelector.PartyOrRaid(TargetSelectionFilter.Role("HEALER")))
 	)
 end
