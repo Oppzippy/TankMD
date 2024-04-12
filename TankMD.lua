@@ -127,6 +127,7 @@ end
 ---@return string[]
 function TankMD:GetTargets()
 	local _, class = UnitClass("player")
-	local selector = addon.ClassTargetSelectors[class]() or addon.TargetSelector.Chain({})
+	local createSelector = addon.ClassTargetSelectors[class]
+	local selector = createSelector and createSelector() or addon.TargetSelector.Chain({})
 	return addon.TargetSelector.Evaluate(selector)
 end
