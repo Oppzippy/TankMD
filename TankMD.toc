@@ -1,5 +1,6 @@
 ## Interface: 100206
 ## Interface-Wrath: 30403
+## Interface-Cata: 40400
 ## Title: TankMD
 ## Notes: One button to always misdirect to the tank. Also supports Tricks for rogues, Blistering Scales for evokers and Innervate for druids (targets healers).
 ## Author: Oppzippy
