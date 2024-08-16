@@ -19,6 +19,7 @@ local function createButton(name, spell)
 	button:SetAttribute("checkselfcast", false)
 	button:SetAttribute("checkfocuscast", false)
 	button:SetAttribute("allowVehicleTarget", false)
+	button:SetAttribute("pressAndHoldAction", "1") -- Ensures the action always fires on Down, regardless of the ActionButtonUseKeyDown cvar
 	button:RegisterForClicks("LeftButtonDown", "LeftButtonUp")
 	return button
 end
