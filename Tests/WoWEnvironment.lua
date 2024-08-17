@@ -11,7 +11,8 @@ function ExecuteWoWLuaFile(path)
 	func("TankMD", namespace)
 end
 
-function LibStub() end
+-- Avoid language server overriding LibStub typings with this
+_G['LibStub'] = function() end
 
 MAX_RAID_MEMBERS = 40
 MAX_PARTY_MEMBERS = 4
