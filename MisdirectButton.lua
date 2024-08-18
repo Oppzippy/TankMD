@@ -15,11 +15,12 @@ local function createButton(name, spell)
 	local button = CreateFrame("Button", name, UIParent, "SecureActionButtonTemplate")
 	button:Hide()
 	button:SetAttribute("type", "spell")
+	button:SetAttribute("typerelease", "spell")
 	button:SetAttribute("spell", spell)
 	button:SetAttribute("checkselfcast", false)
 	button:SetAttribute("checkfocuscast", false)
 	button:SetAttribute("allowVehicleTarget", false)
-	button:SetAttribute("pressAndHoldAction", "1") -- Ensures the action always fires on Down, regardless of the ActionButtonUseKeyDown cvar
+	button:SetAttribute("pressAndHoldAction", "1") -- Ensures that depending on ActionButtonUseKeyDown cvar and whether the click is up or down, it'll run `type` or `typerelease`
 	button:RegisterForClicks("LeftButtonDown", "LeftButtonUp")
 	return button
 end
