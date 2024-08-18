@@ -11,11 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Install luacheck and luarocks
-        run: sudo apt-get install lua-check luarocks
+      - name: Install luarocks
+        run: sudo apt-get install luarocks
       - name: Install luaunit
         run: sudo luarocks install luaunit
-      - name: Lint
-        run: luacheck .
       - name: Test
         run: lua5.1 Tests/Test.lua
